@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="core-demo" />
+        <module name="edge-demo" />
+        <module name="gateway-demo" />
+        <module name="member-core-demo" />
+        <module name="member-edge-demo" />
+        <module name="member-gateway-demo" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="core-demo" target="1.8" />
+      <module name="edge-demo" target="1.8" />
+      <module name="gateway-demo" target="1.8" />
+      <module name="member-core-demo" target="1.8" />
+      <module name="member-core-demo (1)" target="1.5" />
+      <module name="member-edge-demo" target="1.8" />
+      <module name="member-gateway-demo" target="1.8" />
+      <module name="microservice" target="1.5" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

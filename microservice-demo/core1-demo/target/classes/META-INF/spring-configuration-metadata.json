@@ -1,0 +1,12 @@
+{
+  "hints": [],
+  "groups": [
+    {
+      "sourceType": "com.test.demo.configuration.DataSourceDbsConfig",
+      "name": "spring.datasource",
+      "sourceMethod": "dbsDataSource()",
+      "type": "javax.sql.DataSource"
+    }
+  ],
+  "properties": []
+}

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="false">
+      <jmxConfigurator/>
+    <!-- 模块名称， 影响日志配置名，日志文件名 -->
+    <property name="LOG.SERVICE.NAME" value="EDGE-DEMO" />
+    <!--定义日志文件的存储地址 勿在 LogBack 的配置中使用绝对路径 -->
+    <!-- Linux环境 -->
+    <property name="LOG_PATH" value="/var/log/tomcat/${LOG.SERVICE.NAME}" /> 
+    <!-- 日志文件大小,超过这个大小将被压缩 -->
+    <property name="LOG.MAX.SIZE" value="500MB" />
+    <!-- 日志文件留守天数 -->
+    <property name="LOG.MAX.HISTORY" value="30" />
+    <!-- 日志输出格式 -->
+    <property name="FILE_LOG_PATTERN"
+        value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%level]- [%thread] - [%logger{56}:%method:%line] - %msg %n" />
+
+    <!-- 控制台输出 -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- DEBUG级别日志-按照每天生成日志文件 -->
+    <appender name="DEBUG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>DEBUG</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+
+        <file>${LOG_PATH}/debug.log</file>
+        <!-- 设置滚动策略 -->
+        <!-- 按天来回滚，如果需要按小时来回滚，则设置为{yyyy-MM-dd_HH} -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--设置日志命名模式 -->
+            <fileNamePattern>${LOG_PATH}/debug.log.%d{yyyy-MM-dd}.log
+            </fileNamePattern>
+            <!-- 如果按天来回滚，则最大保存时间为60天，60天之前的都将被清理掉 这里的值与滚动策略模式有关 -->
+            <maxHistory>${LOG.MAX.HISTORY}</maxHistory>
+        </rollingPolicy>
+        <!-- 格式化输出 -->
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- INFO级别日志-按照每天生成日志文件 -->
+    <appender name="INFO_FILE"
+        class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <file>${LOG_PATH}/info.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/info.log.%d{yyyy-MM-dd}.log
+            </fileNamePattern>
+            <maxHistory>${LOG.MAX.HISTORY}</maxHistory>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- <appender name="WARN_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender"> 
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+         <level>WARN</level> 
+        <onMatch>ACCEPT</onMatch>
+        <onMismatch>DENY</onMismatch> 
+        </filter> 
+        <file>${LOG_PATH}/warn.log</file> 
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"> 
+          <fileNamePattern>${LOG_PATH}/info.log.%d{yyyy-MM-dd}%i.log</fileNamePattern>
+            <maxHistory>${LOG.MAX.HISTORY}</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy
+                class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>${LOG.MAX.SIZE}</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy> 
+        <encoder> <pattern>${FILE_LOG_PATTERN}</pattern> 
+        </encoder>
+        </appender> -->
+
+    <appender name="ERROR_FILE"
+        class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <file>${LOG_PATH}/error.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/error.log.%d{yyyy-MM-dd}.log
+            </fileNamePattern>
+            <maxHistory>${LOG.MAX.HISTORY}</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+    
+    <!-- 下面配置一些第三方包的日志过滤级别，用于避免刷屏 -->
+    <logger name="org.hibernate" level="WARN" />
+    <logger name="org.springframework" level="WARN" />
+    <logger name="org.thymeleaf" level="WARN" />
+    <logger name="org.apache" level="WARN" />
+
+    <logger name="com.apache.ibatis" level="TRACE" />
+    <logger name="java.sql.Connection" level="DEBUG" />
+    <logger name="java.sql.PreparedStatement" level="DEBUG" />
+    <logger name="java.sql.Statement" level="DEBUG" />
+    <logger name="io.lettuce.core" level="WARN" />
+    <logger name="io.netty" level="WARN" />
+    
+    <root level="DEBUG">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="DEBUG_FILE" />
+        <appender-ref ref="INFO_FILE" />
+        <appender-ref ref="ERROR_FILE" />
+    </root>
+    
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="INFO_FILE" />
+        <appender-ref ref="ERROR_FILE" />
+    </root>
+</configuration>  

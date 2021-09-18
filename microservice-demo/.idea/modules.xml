@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/core1-demo/core-demo.iml" filepath="$PROJECT_DIR$/core1-demo/core-demo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/edge-demo/edge-demo.iml" filepath="$PROJECT_DIR$/edge-demo/edge-demo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/gateway-demo/gateway-demo.iml" filepath="$PROJECT_DIR$/gateway-demo/gateway-demo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/core1-demo/member-core-demo.iml" filepath="$PROJECT_DIR$/core1-demo/member-core-demo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/edge-demo/member-edge-demo.iml" filepath="$PROJECT_DIR$/edge-demo/member-edge-demo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/gateway-demo/member-gateway-demo.iml" filepath="$PROJECT_DIR$/gateway-demo/member-gateway-demo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/microservice.iml" filepath="$PROJECT_DIR$/microservice.iml" />
+    </modules>
+  </component>
+</project>

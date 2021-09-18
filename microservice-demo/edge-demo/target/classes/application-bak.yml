@@ -1,0 +1,19 @@
+#spring:
+#               cloud:
+#                 consul:
+#                   host: localhost
+#                   port: 8500
+#                   discovery:
+#                     register: true
+#                     serviceName: ${spring.application.name}
+#                     healthCheckPath: /actuator/health
+#                     healthCheckInterval: 5s
+#                     tags: ${spring.application.name}
+#                     instanceId: ${spring.application.name}
+#               management:
+#                 endpoints:
+#                   web:
+#                     exposure:
+#                       include: '*'
+#                 security:
+#                   enabled: false

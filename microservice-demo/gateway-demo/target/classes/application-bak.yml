@@ -1,0 +1,117 @@
+spring:
+#  application:
+#    name: gateway-demo
+#  redis:
+#    password: wjnmT69Pn666x3N
+#    cluster:
+#      nodes: 10.142.141.51:7001,10.142.141.51:7002,10.142.141.51:7003,10.142.141.51:7004,10.142.141.51:7005,10.142.141.51:7006
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true #表示注册中心生效，我们可以通过注册中心的服务名进行路由转发
+      default-filters: #代表默认过滤器，全局过滤器，不属于任何一个route
+        - name: Retry
+          args:
+            retries: 1 #默认为3，用来标识重试次数，不包含本次
+            series: #用来指定哪些段的状态码需要重试，默认SERVER_ERROR即5xx
+              - SERVER_ERROR
+            #- CLIENT_ERROR
+            methods: #用于指定那些方法的请求需要重试,默认为GET
+              - GET
+              - POST
+            #statuses: #用于指定哪些状态需要重试,默认为空,它跟series至少得指定一个,100(info),200(success),300(redirect),400(client error),500(server error)
+            #- 400
+            #- 500
+            #exceptions: #用于指定哪些异常需要重试，默认为IOException,TimeoutException
+            #- java.io.IOException
+            #- java.util.concurrent.TimeoutException
+      routes:
+        - id: edge-demo-route #路由ID,如果使用自定义限流,id名称需要与配置限流的保持一致
+          uri: www.baidu.com #lb://edge-demo #路由目标服务地址
+          predicates: #路由断言集合
+            - Path=/edge/** #上下文路由断言
+          filters:
+#            - name: CustomRequestRateLimiter    #自定义限流
+#              args:
+#                key-resolver: "#{@apiKeyResolver}" #使用Spel按名称引用bean   此处以方法限流
+#                redis-rate-limiter.replenishRate: 1 #允许用户每秒处理多少个请求
+#                redis-rate-limiter.burstCapacity: 1 #令牌桶容量，允许在1秒内完成的最大请求数
+                #request_rate_limiter.{xxx}.timestamp 当前时间的秒数
+                #request_rate_limiter.{xxx}.tokens 当前这秒钟的对应的可用的令牌数量
+                #需要与策略类的方法名保持一致。
+                #key-resolver: "#{@sysKeyResolver}"
+                #需要与上边的方法名保持一致
+                #rate-limiter: "#{@systemRedisRateLimiter}"
+            - StripPrefix=1
+            - name: Hystrix #Hystrix过滤器，用于请求的熔断降级
+              args: #Hystrix配置参数
+                name: fallbackCommand #HystrixCommand名称
+                fallbackUri: forward:/fallback #fallback对应的uri,目前仅支持forward
+#    consul:
+#      host: localhost
+#      port: 8500
+#      enabled: true
+#      discovery:
+#        register: true
+#        preferAgentAddress: true
+#        preferIpAddress: true
+#        serviceName: ${spring.application.name}
+#        healthCheckPath: /actuator/health
+#        healthCheckInterval: 15s
+#        tags: version=1.0,group=service-group
+#        instanceId: ${spring.application.name}
+
+        cloud:
+          consul:
+            host: localhost
+            port: 8500
+            discovery:
+              register: true
+              serviceName: ${spring.application.name}
+              healthCheckPath: /actuator/health
+              healthCheckInterval: 5s
+              tags: ${spring.application.name}
+              instanceId: ${spring.application.name}
+
+#Hystrix断路器默认超时时间
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 30000
+
+#Ribbon负载均衡和重试策略
+ribbon:
+  ReadTimeout: 25000
+  ConnectTimeout: 25000
+  MaxAutoRetriesNextServer: 2 #最多重试多少台服务器
+  MaxAutoRetries: 1 #每台服务器最多重试次数，但是首次调用不包括在内
+  OkToRetryOnAllOperations: false
+
+logging:
+  level:
+    org:
+      springframework:
+        cloud:
+          gateway: INFO
+          gateway.filter.LoadBalancerClientFilter: TRACE
+        http:
+          server:
+            reactive: INFO
+        web:
+          reactive: INFO
+    reactor:
+      ipc:
+        netty: INFO
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: '*'
+#  security:
+#    enabled: false
+#server:
+#  port: 18401
